@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, "6.0"
 
-  s.source       = { :git => "https://github.com/ConfusedVorlon/HSUIAutomationCheat.git", :tag => "1.0.0" }
+  s.source       = { :git => "https://github.com/ConfusedVorlon/HSTestingBackchannel.git", :tag => "1.0.0" }
 
 
   s.source_files  = "Classes", "Classes/**/*.{h,m}"
