@@ -37,20 +37,13 @@ HSTestingBackchannel gives you a simple method to send messages from your UITest
 
         [HSUIAutomationCheat sendNotification:@“SnapshotTest"];
 
- 5. Respond to notifications within your
-    app
-
-    within your app, a standard NSNotification named @"SnapDisplayMyScreen" will be broadcast.
-
-    you can use the SNAPSHOT define to handle this with custom code
+ 5. Respond to notifications within your app
 
         #ifdef SNAPSHOT
-        
             [[NSNotificationCenter defaultCenter] addObserver:self
                                                      selector:@selector(doSomething:)
                                                          name:@"SnapshotTest" 
-                                                       object:nil];
-        
+                                                       object:nil];    
         #endif
 
 ##Installation
