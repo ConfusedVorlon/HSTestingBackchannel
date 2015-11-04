@@ -9,6 +9,14 @@ UI Testing is massively better than UI Automation - but sometimes, you just want
 
 HSTestingBackchannel gives you a simple method to send messages from your UITesting tests directly to your running app in the form of notifications.
 
+##Installation
+
+Install with CocoaPods
+
+    pod 'HSTestingBackchannel', '~> 0.0'
+
+or download the class and add it to your project.  
+
 ##Usage
 
  1. use a prefix file and 
@@ -45,14 +53,6 @@ HSTestingBackchannel gives you a simple method to send messages from your UITest
                                                          name:@"SnapshotTest" 
                                                        object:nil];    
         #endif
-
-##Installation
-
-Install with CocoaPods
-
-    pod 'HSTestingBackchannel', '~> 0.0'
-
-or download the class and add it to your project.  
 
 
 ##How it works
