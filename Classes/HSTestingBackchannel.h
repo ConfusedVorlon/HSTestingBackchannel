@@ -8,11 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum : NSUInteger {
+    HSTestingDocuments,
+    HSTestingResources
+} HSTestingDestination;
+
 @interface HSTestingBackchannel : NSObject
 
 /** Installs the receiver in your main app
  Call this in your appDidFinishLaunching... **/
 +(void)installReceiver;
+
+/** Copies the contents of directoryPath (including any folders) to destination in the app running on the simulator. **/
++(void)installFilesFrom:(NSString*)directoryPath to:(HSTestingDestination)destination;
 
 /** sends a notification from your testing class. Register to receive a notification with this name in your main app **/
 +(void)sendNotification:(NSString*)notification;

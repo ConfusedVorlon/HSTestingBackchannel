@@ -53,6 +53,15 @@ or download the class and add it to your project.
         #endif
 
 
+## Bonus -  Copy dummy files to the Simulator
+
+Within a test method (or in setUp), call something like
+
+	[HSTestingBackchannel installFilesFrom:@“..pathTo/fastlane/DummyImages" to:HSTestingResources];
+
+This will install the contents of DummyImages in the resources folder of your running app.
+You can also install directly to the Documents directory in the app.
+
 ##How it works
 
 HSTestingBackchannel installs a webserver in your main app (GCDWebServer). 
