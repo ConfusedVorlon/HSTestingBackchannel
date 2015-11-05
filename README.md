@@ -28,8 +28,6 @@ or download the class and add it to your project.
  2. In your App Delegate, install the
     helper
 
-    This will install a 1 pixel text field behind your views on your main window. UIAutomation can then change the text field in order to trigger notifications.
-
         #ifdef SNAPSHOT
 			#import <HSTestingBackchannel/HSTestingBackchannel.h>
 		#endif
@@ -43,7 +41,7 @@ or download the class and add it to your project.
  3. Send notifications from your UITesting class
 
 
-        [HSUIAutomationCheat sendNotification:@“SnapshotTest"];
+        [HSTestingBackchannel sendNotification:@“SnapshotTest"];
 
  5. Respond to notifications within your app
 
