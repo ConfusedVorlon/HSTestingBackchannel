@@ -25,7 +25,7 @@
 
 +(void)installFilesFrom:(NSString*)directoryPath to:(HSTestingDestination)destination
 {
-        NSString *address=[NSString stringWithFormat:@"http://localhost:54350/filecopy/%d",destination];
+        NSString *address=[NSString stringWithFormat:@"http://localhost:54350/filecopy/%lu",(unsigned long)destination];
         NSURL *url=[NSURL URLWithString:address];
         
         NSURLResponse *response=NULL;
