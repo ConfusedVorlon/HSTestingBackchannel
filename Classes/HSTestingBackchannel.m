@@ -66,9 +66,42 @@
 
 }
 
-+(void)sendNotification:(NSString*)notification
++(NSString*)urlEscapedString:(NSString*)string
 {
-    NSString *address=[NSString stringWithFormat:@"http://localhost:54350/notification/%@",notification];
+    NSString *newString= (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
+                                                                            NULL,
+                                                                            (CFStringRef)string,
+                                                                            NULL,
+                                                                            (CFStringRef)@";/?:@&=+$,", 
+                                                                            kCFStringEncodingUTF8
+                                                                            ));
+    
+    
+    return newString;
+}
+
++(void)sendNotification:(NSString*)notification withDictionary:(NSDictionary*)dictionary
+{
+    NSMutableString *address=[NSMutableString stringWithFormat:@"http://localhost:54350/notification/%@",notification];
+    
+    BOOL first=YES;
+    for (NSString *key in [dictionary allKeys]) {
+        NSString *value=[dictionary objectForKey:key];
+        
+        if (first)
+        {
+            [address appendString:@"?"];
+            first=NO;
+        }
+        else
+        {
+            [address appendString:@"&"];
+        }
+        
+        [address appendFormat:@"%@=%@",[self urlEscapedString:key],[self urlEscapedString:value]];
+    }
+    
+    
     NSURL *url=[NSURL URLWithString:address];
     
     NSURLResponse *response=NULL;
@@ -82,6 +115,11 @@
     {
         NSLog(@"error sending notification: %@",error);
     }
+}
+
++(void)sendNotification:(NSString*)notification
+{
+    [self sendNotification:notification withDictionary:NULL];
 }
 
 + (instancetype)sharedInstance
@@ -118,6 +156,7 @@
     }
 }
 
+
 - (instancetype)init
 {
     self = [super init];
@@ -142,7 +181,15 @@
                                          NSString *notif=[request.path lastPathComponent];
                                          NSString *response=[@"got: " stringByAppendingString:notif];
                                          
-                                         [[NSNotificationCenter defaultCenter] postNotificationName:notif object:self];
+                                         NSNotification *notification=[NSNotification notificationWithName:notif
+                                                                                                    object:self
+                                                                                                  userInfo:request.query];
+                                         
+                                         //You are probably using notifications for UI updates, so send them on the main thread
+                                         [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:)
+                                                                                                withObject:notification
+                                                                                             waitUntilDone:YES];
+              
                                          
                                          return [GCDWebServerDataResponse responseWithText:response];
                                      }

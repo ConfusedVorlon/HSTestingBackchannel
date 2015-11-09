@@ -25,5 +25,13 @@ typedef enum : NSUInteger {
 /** sends a notification from your testing class. Register to receive a notification with this name in your main app **/
 +(void)sendNotification:(NSString*)notification;
 
+/** sends a notification from your testing class. Sends the dictionary as userInfo 
+ @param notification the name of the broadcast notification
+ @param dictionary dictionary to send in userInfo. Keys and values must be strings;
+ **/
++(void)sendNotification:(NSString*)notification withDictionary:(NSDictionary*)dictionary;
+
+
+
 @end
 
