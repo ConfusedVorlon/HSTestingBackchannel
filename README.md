@@ -41,7 +41,12 @@ or download the class and add it to your project.
  3. Send notifications from your UITesting class
 
 
-        [HSTestingBackchannel sendNotification:@“SnapshotTest"];
+        [HSTestingBackchannel sendNotification:@"SnapshotTest"];
+
+or
+
+    [HSTestingBackchannel sendNotification:@"SnapshotTest"
+                            withDictionary:@{@"key":@"value"}];
 
  5. Respond to notifications within your app
 
@@ -57,7 +62,10 @@ or download the class and add it to your project.
 
 Within a test method (or in setUp), call something like
 
-	[HSTestingBackchannel installFilesFrom:@“..pathTo/fastlane/DummyImages" to:HSTestingResources];
+	[HSTestingBackchannel installFilesFrom:@"..pathTo/fastlane/DummyImages" 
+                                        to:HSTestingResources];
+
+
 
 This will install the contents of DummyImages in the resources folder of your running app.
 You can also install directly to the Documents directory in the app.
