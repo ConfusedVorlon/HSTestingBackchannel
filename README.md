@@ -15,8 +15,6 @@ Install with CocoaPods
 
     pod 'HSTestingBackchannel', :configuration => ['Debug']
 
-or download the class and add it to your project.  
-
 ##Usage
 
  1. use a prefix file and 
