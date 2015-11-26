@@ -62,6 +62,10 @@
             {
                 NSLog(@"error copying %@: %@",item,error);
             }
+            else
+            {
+                NSLog(@"HSTestingBackchannel copied: %@",item);
+            }
         }
 
 }
