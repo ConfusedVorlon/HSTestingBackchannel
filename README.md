@@ -13,7 +13,7 @@ HSTestingBackchannel gives you a simple method to send messages from your UITest
 
 Install with CocoaPods
 
-    pod 'HSTestingBackchannel', '~> 0.0'
+    pod 'HSTestingBackchannel', :configuration => ['Debug']
 
 or download the class and add it to your project.  
 
@@ -76,7 +76,6 @@ HSTestingBackchannel installs a webserver in your main app (GCDWebServer).
 
 You simply send requests directly to that - and it recognises them and broadcasts NSNotifications
 
-Note - this is not something you want in your shipping code, so you should comment out the pod and your prefix define before rebuilding and shipping.
 
   [1]: https://github.com/KrauseFx/snapshot
   [2]: https://github.com/fastlane/snapshot/issues/241
