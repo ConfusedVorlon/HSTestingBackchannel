@@ -209,7 +209,11 @@
     return self;
 }
 
-
++(void)wait:(NSTimeInterval)delay
+{
+    NSDate *smallDelay = [NSDate dateWithTimeIntervalSinceNow:delay];
+    [[NSRunLoop mainRunLoop] runUntilDate:smallDelay];
+}
 
 @end
 

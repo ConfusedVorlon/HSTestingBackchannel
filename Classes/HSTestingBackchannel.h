@@ -31,7 +31,10 @@ typedef enum : NSUInteger {
  **/
 +(void)sendNotification:(NSString*)notification withDictionary:(NSDictionary*)dictionary;
 
-
+/** wait for a bit
+ @param delay Seconds to wait
+ **/
++(void)wait:(NSTimeInterval)delay;
 
 @end
 
