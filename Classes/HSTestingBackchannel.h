@@ -19,7 +19,10 @@ typedef enum : NSUInteger {
  Call this in your appDidFinishLaunching... **/
 +(void)installReceiver;
 
-/** Copies the contents of directoryPath (including any folders) to destination in the app running on the simulator. **/
+/** Copies the contents of directoryPath (including any folders) to destination in the app running on the simulator. 
+ @param directoryPath this is the full path to a directory on the testing machine. All files and folders in this directory will be copied
+ @param destination this is either the resource bundle or the document directory of the running app
+ **/
 +(void)installFilesFrom:(NSString*)directoryPath to:(HSTestingDestination)destination;
 
 /** sends a notification from your testing class. Register to receive a notification with this name in your main app **/
