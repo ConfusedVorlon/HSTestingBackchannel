@@ -19,6 +19,11 @@ typedef enum : NSUInteger {
  Call this in your appDidFinishLaunching... **/
 +(void)installReceiver;
 
+/** Asks the device being tested to identify itself
+ @response NSString either @"ipad" or @"iphone"
+ **/
++(NSString*)deviceType;
+
 /** Copies the contents of directoryPath (including any folders) to destination in the app running on the simulator. 
  @param directoryPath this is the full path to a directory on the testing machine. All files and folders in this directory will be copied
  @param destination this is either the resource bundle or the document directory of the running app

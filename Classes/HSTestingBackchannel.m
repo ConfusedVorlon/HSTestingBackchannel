@@ -23,62 +23,84 @@
     [HSTestingBackchannel sharedInstance];
 }
 
++(NSString*)deviceType
+{
+    NSString *address=[NSString stringWithFormat:@"http://localhost:54350/device"];
+    NSURL *url=[NSURL URLWithString:address];
+    
+    NSURLResponse *response=NULL;
+    NSError *error=NULL;
+    
+    NSData *data=[NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
+                                       returningResponse:&response
+                                                   error:&error];
+    
+    NSString *device=[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    
+    return device;
+}
+
 +(void)installFilesFrom:(NSString*)directoryPath to:(HSTestingDestination)destination
 {
-        NSString *address=[NSString stringWithFormat:@"http://localhost:54350/filecopy/%lu",(unsigned long)destination];
-        NSURL *url=[NSURL URLWithString:address];
+    NSString *address=[NSString stringWithFormat:@"http://localhost:54350/filecopy/%lu",(unsigned long)destination];
+    NSURL *url=[NSURL URLWithString:address];
+    
+    NSURLResponse *response=NULL;
+    NSError *error=NULL;
+    
+    NSData *data=[NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
+                                       returningResponse:&response
+                                                   error:&error];
+    
+    if (!data) {
+        NSLog(@"No response from application - unable to install files. Did you 'installReceiver' in the app?");
+        return;
+    }
+    
+    
+    NSString *destinationPath=[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"HSTestingBackchannel copying to: %@",destinationPath);
+    
+    NSFileManager *fm=[NSFileManager defaultManager];
+    NSArray *items=[fm contentsOfDirectoryAtPath:directoryPath error:NULL];
+    if (error)
+    {
+        NSLog(@"error ennumerating source dir: %@",error);
+    }
+    
+    for (NSString *item in items)
+    {
+        if ([item hasPrefix:@"."])
+        {
+            continue;
+        }
         
-        NSURLResponse *response=NULL;
-        NSError *error=NULL;
-        
-        NSData *data=[NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
-                              returningResponse:&response
-                                          error:&error];
-        
-        
-        NSString *destinationPath=[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"response: %@",destinationPath);
-
-        NSFileManager *fm=[NSFileManager defaultManager];
-        NSArray *items=[fm contentsOfDirectoryAtPath:directoryPath error:NULL];
+        NSString *from=[directoryPath stringByAppendingPathComponent:item];
+        NSString *to=[destinationPath stringByAppendingPathComponent:item];
+        [fm copyItemAtPath:from
+                    toPath:to
+                     error:&error];
         if (error)
         {
-            NSLog(@"error ennumerating source dir: %@",error);
+            NSLog(@"error copying %@: %@",item,error);
         }
-        
-        for (NSString *item in items)
+        else
         {
-            if ([item hasPrefix:@"."])
-            {
-                continue;
-            }
-            
-            NSString *from=[directoryPath stringByAppendingPathComponent:item];
-            NSString *to=[destinationPath stringByAppendingPathComponent:item];
-            [fm copyItemAtPath:from
-                        toPath:to
-                         error:&error];
-            if (error)
-            {
-                NSLog(@"error copying %@: %@",item,error);
-            }
-            else
-            {
-                NSLog(@"HSTestingBackchannel copied: %@",item);
-            }
+            NSLog(@"HSTestingBackchannel copied: %@",item);
         }
-
+    }
+    
 }
 
 +(NSString*)urlEscapedString:(NSString*)string
 {
     NSString *newString= (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
-                                                                            NULL,
-                                                                            (CFStringRef)string,
-                                                                            NULL,
-                                                                            (CFStringRef)@";/?:@&=+$,", 
-                                                                            kCFStringEncodingUTF8
-                                                                            ));
+                                                                                              NULL,
+                                                                                              (CFStringRef)string,
+                                                                                              NULL,
+                                                                                              (CFStringRef)@";/?:@&=+$,",
+                                                                                              kCFStringEncodingUTF8
+                                                                                              ));
     
     
     return newString;
@@ -133,7 +155,7 @@
     dispatch_once(&once, ^{
         
         sharedInstance = [[self alloc] init];
-
+        
     });
     return sharedInstance;
 }
@@ -179,7 +201,7 @@
                                          
                                          return [GCDWebServerDataResponse responseWithText:path];
                                      }
-                                         
+                                     
                                      if ([request.path hasPrefix:@"/notification"])
                                      {
                                          NSString *notif=[request.path lastPathComponent];
@@ -193,15 +215,22 @@
                                          [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:)
                                                                                                 withObject:notification
                                                                                              waitUntilDone:YES];
-              
+                                         
                                          
                                          return [GCDWebServerDataResponse responseWithText:response];
+                                     }
+                                     
+                                     if ([request.path hasPrefix:@"/device"])
+                                     {
+                                         NSString *type= (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? @"ipad" : @"iphone";
+                                         
+                                         return [GCDWebServerDataResponse responseWithText:type];
                                      }
                                      
                                      return nil;
                                      
                                  }];
-     
+        
         [webServer startWithPort:54350 bonjourName:nil];
         NSLog(@"Visit %@ in your web browser", webServer.serverURL);
         
