@@ -1,5 +1,5 @@
 
-##Backchannel for UITesting.
+# Backchannel for UITesting.
 
 [Snapshot][1] is awesome. 
 
@@ -9,13 +9,13 @@ UI Testing is massively better than UI Automation - but sometimes, you just want
 
 HSTestingBackchannel gives you a simple method to send messages from your UITesting tests directly to your running app in the form of notifications.
 
-##Installation
+## Installation
 
 Install with CocoaPods
 
     pod 'HSTestingBackchannel', :configuration => ['Debug']
 
-##Usage
+## Usage
 
  1. use a prefix file and 
 
@@ -68,7 +68,7 @@ Within a test method (or in setUp), call something like
 This will install the contents of DummyImages in the resources folder of your running app.
 You can also install directly to the Documents directory in the app.
 
-##How it works
+## How it works
 
 HSTestingBackchannel installs a webserver in your main app (GCDWebServer). 
 
