@@ -15,6 +15,13 @@ typedef enum : NSUInteger {
 
 @interface HSTestingBackchannel : NSObject
 
+/** Allows setting the specific port testing backchannel should use.
+ * The port needs to be set before calling any of the other methods.
+ * This allows to e.g. supporting concurrent test executions by
+ * randomizing the used port to avoid conflicts.
+ */
+@property (class, assign) NSUInteger port;
+
 /** Installs the receiver in your main app
  Call this in your appDidFinishLaunching... **/
 +(void)installReceiver;
