@@ -3,12 +3,12 @@ Pod::Spec.new do |s|
 
 
   s.name         = "HSTestingBackchannel"
-  s.version      = "1.2.1"
+  s.version      = "1.2.2"
 
   s.summary      = "Send notifications directly from your UITesting classes to your running app."
 
   s.description  = <<-DESC
-                   Sometimes you want to cheat in your UITesting. 
+                   Sometimes you want to cheat in your UITesting.
 
                    HSTestingBackchannel provides an easy way for you to send notifications to your running app. You can use these to set things up for tests, screenshots, etc
                    DESC
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, "7.0"
 
-  s.source       = { :git => "https://github.com/ConfusedVorlon/HSTestingBackchannel.git", :tag => "1.2.1" }
+  s.source       = { :git => "https://github.com/ConfusedVorlon/HSTestingBackchannel.git", :tag => "1.2.2" }
 
 
   s.source_files  = "Classes", "Classes/**/*.{h,m}"
