@@ -18,6 +18,16 @@
 
 @implementation HSTestingBackchannel
 
+static NSUInteger _port  = 54350;
+    
++ (NSUInteger) port {
+    return _port;
+}
+
++ (void) setPort:(NSUInteger) port {
+    _port = port;
+}
+    
 +(void)installReceiver
 {
     [HSTestingBackchannel sharedInstance];
@@ -25,7 +35,7 @@
 
 +(NSString*)deviceType
 {
-    NSString *address=[NSString stringWithFormat:@"http://localhost:54350/device"];
+    NSString *address=[NSString stringWithFormat:@"http://localhost:%d/device", self.port];
     NSURL *url=[NSURL URLWithString:address];
     
     NSURLResponse *response=NULL;
@@ -42,7 +52,7 @@
 
 +(void)installFilesFrom:(NSString*)directoryPath to:(HSTestingDestination)destination
 {
-    NSString *address=[NSString stringWithFormat:@"http://localhost:54350/filecopy/%lu",(unsigned long)destination];
+    NSString *address=[NSString stringWithFormat:@"http://localhost:%d/filecopy/%lu", self.port, (unsigned long)destination];
     NSURL *url=[NSURL URLWithString:address];
     
     NSURLResponse *response=NULL;
@@ -108,7 +118,7 @@
 
 +(void)sendNotification:(NSString*)notification withDictionary:(NSDictionary*)dictionary
 {
-    NSMutableString *address=[NSMutableString stringWithFormat:@"http://localhost:54350/notification/%@",notification];
+    NSMutableString *address=[NSMutableString stringWithFormat:@"http://localhost:%d/notification/%@",self.port,notification];
     
     BOOL first=YES;
     for (NSString *key in [dictionary allKeys]) {
@@ -231,7 +241,7 @@
                                      
                                  }];
         
-        [webServer startWithPort:54350 bonjourName:nil];
+        [webServer startWithPort:[HSTestingBackchannel port] bonjourName:nil];
         NSLog(@"Visit %@ in your web browser", webServer.serverURL);
         
     }
