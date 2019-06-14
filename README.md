@@ -19,14 +19,14 @@ Install with CocoaPods
 
  1. set an 'Active Compilation Condition' in your swift project to define SNAPSHOT
 
-        ![Demo table](https://raw.githubusercontent.com/ConfusedVorlon/HSTestingBackchannel/master/Images/compilation.jpg)
+![Compilation](https://raw.githubusercontent.com/ConfusedVorlon/HSTestingBackchannel/master/images/compilation.jpg)
 
  2. In your App Delegate, install the
     helper
 
         #if SNAPSHOT
 			import HSTestingBackchannel
-	#endif
+        #endif
 
         (and then in application(_:didFinishLaunchingWithOptions:))
 
@@ -41,7 +41,7 @@ Install with CocoaPods
 
 or
 
-    HSTestingBackchannel.sendNotification("SnapshotTest",with: ["aKey":"aValue"])
+        HSTestingBackchannel.sendNotification("SnapshotTest",with: ["aKey":"aValue"])
 
  5. Respond to notifications within your app
 
@@ -71,14 +71,14 @@ By default, Fastlane now runs multiple simulators simultaneously. This means you
 
 Use the setup method to do the following
 
-let app = XCUIApplication()
-
-HSTestingBackchannel.port = UInt.random(in: 8000 ... 60000)
-app.launchArguments.append(contentsOf:["-HSTestingBackchannelPort","\(HSTestingBackchannel.port)"])
-
-Snapshot.setupSnapshot(app, waitForAnimations: true)
-
-app.launch()
+        let app = XCUIApplication()
+        
+        HSTestingBackchannel.port = UInt.random(in: 8000 ... 60000)
+        app.launchArguments.append(contentsOf:["-HSTestingBackchannelPort","\(HSTestingBackchannel.port)"])
+        
+        Snapshot.setupSnapshot(app, waitForAnimations: true)
+        
+        app.launch()
 
 ## How it works
 
