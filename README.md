@@ -17,42 +17,40 @@ Install with CocoaPods
 
 ## Usage
 
- 1. use a prefix file and 
+ 1. set an 'Active Compilation Condition' in your swift project to define SNAPSHOT
 
-        #define SNAPSHOT true
-
-	(We’re still hoping that snapshot will re-introduce [custom build arguments][2])
+        ![Demo table](https://raw.githubusercontent.com/ConfusedVorlon/HSTestingBackchannel/master/Images/compilation.jpg)
 
  2. In your App Delegate, install the
     helper
 
-        #ifdef SNAPSHOT
-			#import <HSTestingBackchannel/HSTestingBackchannel.h>
-		#endif
+        #if SNAPSHOT
+			import HSTestingBackchannel
+	#endif
 
-        (and then in application:didFinishLaunchingWithOptions:)
+        (and then in application(_:didFinishLaunchingWithOptions:))
 
         #ifdef SNAPSHOT
-            [HSTestingBackchannel installReceiver];
+            HSTestingBackchannel.installReceiver
         #endif
 
  3. Send notifications from your UITesting class
 
 
-        [HSTestingBackchannel sendNotification:@"SnapshotTest"];
+        HSTestingBackchannel.sendNotification("SnapshotTest")
 
 or
 
-    [HSTestingBackchannel sendNotification:@"SnapshotTest"
-                            withDictionary:@{@"key":@"value"}];
+    HSTestingBackchannel.sendNotification("SnapshotTest",with: ["aKey":"aValue"])
 
  5. Respond to notifications within your app
 
-        #ifdef SNAPSHOT
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(doSomething:)
-                                                         name:@"SnapshotTest" 
-                                                       object:nil];    
+        #if SNAPSHOT
+                NotificationCenter.default.addObserver(forName:NSNotification.Name.init("SnapshotTest"),
+                object: nil,
+                queue: .main) { (_) in
+                    //Do Something
+                }  
         #endif
 
 
@@ -60,13 +58,27 @@ or
 
 Within a test method (or in setUp), call something like
 
-	[HSTestingBackchannel installFilesFrom:@"..pathTo/fastlane/DummyImages" 
+	HSTestingBackchannel.installFiles(from:"..pathTo/fastlane/DummyImages",
                                         to:HSTestingResources];
-
 
 
 This will install the contents of DummyImages in the resources folder of your running app.
 You can also install directly to the Documents directory in the app.
+
+## Multiple Simultaneous Simulators
+
+By default, Fastlane now runs multiple simulators simultaneously. This means you need to make sure that the server for each simulator is running on a different test.
+
+Use the setup method to do the following
+
+let app = XCUIApplication()
+
+HSTestingBackchannel.port = UInt.random(in: 8000 ... 60000)
+app.launchArguments.append(contentsOf:["-HSTestingBackchannelPort","\(HSTestingBackchannel.port)"])
+
+Snapshot.setupSnapshot(app, waitForAnimations: true)
+
+app.launch()
 
 ## How it works
 

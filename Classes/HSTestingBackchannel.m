@@ -158,14 +158,23 @@ static NSUInteger _port  = 54350;
     [self sendNotification:notification withDictionary:NULL];
 }
 
++(void)setPortFromLaunchArgument
+{
+    NSString* passedPort = [NSUserDefaults.standardUserDefaults objectForKey:@"HSTestingBackchannelPort"];
+    if (passedPort) {
+        NSLog(@"setting HSTestingBackchannel port to: %@",passedPort);
+        [HSTestingBackchannel setPort:passedPort.integerValue];
+    }
+}
+
 + (instancetype)sharedInstance
 {
     static dispatch_once_t once;
     static id sharedInstance;
     dispatch_once(&once, ^{
+        [HSTestingBackchannel setPortFromLaunchArgument];
         
         sharedInstance = [[self alloc] init];
-        
     });
     return sharedInstance;
 }
