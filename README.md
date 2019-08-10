@@ -88,7 +88,7 @@ Use the setup method to do the following
 let app = XCUIApplication()
 
 HSTestingBackchannel.port = UInt.random(in: 8000 ... 60000)
-app.launchArguments.append(contentsOf: ["-HSTestingBackchannelPort","\(HSTestingBackchannel.port)"])
+app.launchArguments.append(contentsOf: ["-HSTestingBackchannelPort", "\(HSTestingBackchannel.port)"])
 
 Snapshot.setupSnapshot(app, waitForAnimations: true)
 
