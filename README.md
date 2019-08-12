@@ -13,7 +13,9 @@ HSTestingBackchannel gives you a simple method to send messages from your UITest
 
 Install with CocoaPods
 
-    pod 'HSTestingBackchannel', :configuration => ['Debug']
+```ruby
+pod 'HSTestingBackchannel', :configuration => ['Debug']
+```
 
 ## Usage
 
@@ -24,42 +26,53 @@ Install with CocoaPods
  2. In your App Delegate, install the
     helper
 
-        #if SNAPSHOT
-			import HSTestingBackchannel
-        #endif
+```swift
+#if SNAPSHOT
+    import HSTestingBackchannel
+#endif
+```
 
-        (and then in application(_:didFinishLaunchingWithOptions:))
+And then, in `application(_:didFinishLaunchingWithOptions:)`:
 
-        #ifdef SNAPSHOT
-            HSTestingBackchannel.installReceiver
-        #endif
+```swift
+#ifdef SNAPSHOT
+    HSTestingBackchannel.installReceiver()
+#endif
+```
 
  3. Send notifications from your UITesting class
 
-
-        HSTestingBackchannel.sendNotification("SnapshotTest")
+```swift
+HSTestingBackchannel.sendNotification("SnapshotTest")
+```
 
 or
 
-        HSTestingBackchannel.sendNotification("SnapshotTest",with: ["aKey":"aValue"])
+```swift
+HSTestingBackchannel.sendNotification("SnapshotTest",with: ["aKey":"aValue"])
+```
 
  5. Respond to notifications within your app
 
-        #if SNAPSHOT
-                NotificationCenter.default.addObserver(forName:NSNotification.Name.init("SnapshotTest"),
-                object: nil,
-                queue: .main) { (_) in
-                    //Do Something
-                }  
-        #endif
-
+```swift
+#if SNAPSHOT
+    NotificationCenter.default.addObserver(
+        forName: NSNotification.Name("SnapshotTest"),
+        object: nil,
+        queue: .main) { _ in
+            //Do Something
+    }) 
+#endif
+```
 
 ## Bonus -  Copy dummy files to the Simulator
 
 Within a test method (or in setUp), call something like
 
-	HSTestingBackchannel.installFiles(from:"..pathTo/fastlane/DummyImages",
-                                        to:HSTestingResources];
+```swift
+HSTestingBackchannel.installFiles(from: "..pathTo/fastlane/DummyImages",
+                                    to: HSTestingResources)
+```
 
 
 This will install the contents of DummyImages in the resources folder of your running app.
@@ -71,14 +84,16 @@ By default, Fastlane now runs multiple simulators simultaneously. This means you
 
 Use the setup method to do the following
 
-        let app = XCUIApplication()
-        
-        HSTestingBackchannel.port = UInt.random(in: 8000 ... 60000)
-        app.launchArguments.append(contentsOf:["-HSTestingBackchannelPort","\(HSTestingBackchannel.port)"])
-        
-        Snapshot.setupSnapshot(app, waitForAnimations: true)
-        
-        app.launch()
+```swift
+let app = XCUIApplication()
+
+HSTestingBackchannel.port = UInt.random(in: 8000 ... 60000)
+app.launchArguments.append(contentsOf: ["-HSTestingBackchannelPort", "\(HSTestingBackchannel.port)"])
+
+Snapshot.setupSnapshot(app, waitForAnimations: true)
+
+app.launch()
+```
 
 ## How it works
 
