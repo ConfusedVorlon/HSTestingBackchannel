@@ -35,7 +35,7 @@ static NSUInteger _port  = 54350;
 
 +(NSString*)deviceType
 {
-    NSString *address=[NSString stringWithFormat:@"http://localhost:%d/device", self.port];
+    NSString *address=[NSString stringWithFormat:@"http://localhost:%d/device", (int)self.port];
     NSURL *url=[NSURL URLWithString:address];
     
     NSURLResponse *response=NULL;
@@ -52,7 +52,7 @@ static NSUInteger _port  = 54350;
 
 +(void)installFilesFrom:(NSString*)directoryPath to:(HSTestingDestination)destination
 {
-    NSString *address=[NSString stringWithFormat:@"http://localhost:%d/filecopy/%lu", self.port, (unsigned long)destination];
+    NSString *address=[NSString stringWithFormat:@"http://localhost:%d/filecopy/%lu", (int)self.port, (unsigned long)destination];
     NSURL *url=[NSURL URLWithString:address];
     
     NSURLResponse *response=NULL;
@@ -118,7 +118,7 @@ static NSUInteger _port  = 54350;
 
 +(void)sendNotification:(NSString*)notification withDictionary:(NSDictionary*)dictionary
 {
-    NSMutableString *address=[NSMutableString stringWithFormat:@"http://localhost:%d/notification/%@",self.port,notification];
+    NSMutableString *address=[NSMutableString stringWithFormat:@"http://localhost:%d/notification/%@",(int)self.port,notification];
     
     BOOL first=YES;
     for (NSString *key in [dictionary allKeys]) {
