@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
 
 
   s.name         = "HSTestingBackchannel"
-  s.version      = "1.3.0"
+  s.version      = "1.3.1"
 
   s.summary      = "Send notifications directly from your UITesting classes to your running app."
 
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, "7.0"
 
-  s.source       = { :git => "https://github.com/ConfusedVorlon/HSTestingBackchannel.git", :tag => "1.3.0" }
+  s.source       = { :git => "https://github.com/ConfusedVorlon/HSTestingBackchannel.git", :tag => "1.3.1" }
 
 
   s.source_files  = "Classes", "Classes/**/*.{h,m}"
