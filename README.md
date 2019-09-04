@@ -27,7 +27,7 @@ pod 'HSTestingBackchannel', :configuration => ['Debug']
     helper
 
 ```swift
-#if SNAPSHOT
+#ifdef SNAPSHOT
     import HSTestingBackchannel
 #endif
 ```
@@ -55,7 +55,7 @@ HSTestingBackchannel.sendNotification("SnapshotTest",with: ["aKey":"aValue"])
  5. Respond to notifications within your app
 
 ```swift
-#if SNAPSHOT
+#ifdef SNAPSHOT
     NotificationCenter.default.addObserver(
         forName: NSNotification.Name("SnapshotTest"),
         object: nil,
