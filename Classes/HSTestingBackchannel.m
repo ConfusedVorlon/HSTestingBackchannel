@@ -19,8 +19,6 @@
 
 @implementation HSTestingBackchannel
 
-@synthesize webServer;
-
 static NSUInteger _port  = 54350;
     
 + (NSUInteger) port {
@@ -210,12 +208,12 @@ static NSUInteger _port  = 54350;
     self = [super init];
     if (self) {
         
-        webServer = [[GCDWebServer alloc] init];
+        _webServer = [[GCDWebServer alloc] init];
         typeof(self) __weak weakSelf = self;
         
-        [webServer addDefaultHandlerForMethod:@"GET"
-                                 requestClass:[GCDWebServerRequest class]
-                                 processBlock:^GCDWebServerResponse *(GCDWebServerRequest* request)
+        [_webServer addDefaultHandlerForMethod:@"GET"
+                                  requestClass:[GCDWebServerRequest class]
+                                  processBlock:^GCDWebServerResponse *(GCDWebServerRequest* request)
          {
             
             if ([request.path hasPrefix:@"/filecopy"])
@@ -255,8 +253,8 @@ static NSUInteger _port  = 54350;
             
         }];
         
-        [webServer startWithPort:[HSTestingBackchannel port] bonjourName:nil];
-        NSLog(@"Visit %@ in your web browser", webServer.serverURL);
+        [_webServer startWithPort:[HSTestingBackchannel port] bonjourName:nil];
+        NSLog(@"Visit %@ in your web browser", _webServer.serverURL);
         
     }
     return self;
