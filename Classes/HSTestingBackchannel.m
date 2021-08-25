@@ -13,14 +13,15 @@
 
 @interface HSTestingBackchannel ()
 
+@property (nonatomic, retain) GCDWebServer *webServer;
 
 @end
 
 @implementation HSTestingBackchannel
 
-static NSUInteger _port  = 54350;
+@synthesize webServer;
 
-GCDWebServer *webServer;
+static NSUInteger _port  = 54350;
     
 + (NSUInteger) port {
     return _port;
@@ -210,6 +211,7 @@ GCDWebServer *webServer;
     if (self) {
         
         webServer = [[GCDWebServer alloc] init];
+        typeof(self) __weak weakSelf = self;
         
         [webServer addDefaultHandlerForMethod:@"GET"
                                  requestClass:[GCDWebServerRequest class]
@@ -218,7 +220,7 @@ GCDWebServer *webServer;
                                      if ([request.path hasPrefix:@"/filecopy"])
                                      {
                                          NSString *destination=[request.path lastPathComponent];
-                                         NSString *path=[self pathForDestination:[destination integerValue]];
+                                         NSString *path=[weakSelf pathForDestination:[destination integerValue]];
                                          
                                          return [GCDWebServerDataResponse responseWithText:path];
                                      }
@@ -229,7 +231,7 @@ GCDWebServer *webServer;
                                          NSString *response=[@"got: " stringByAppendingString:notif];
                                          
                                          NSNotification *notification=[NSNotification notificationWithName:notif
-                                                                                                    object:self
+                                                                                                    object:weakSelf
                                                                                                   userInfo:request.query];
                                          
                                          //You are probably using notifications for UI updates, so send them on the main thread
