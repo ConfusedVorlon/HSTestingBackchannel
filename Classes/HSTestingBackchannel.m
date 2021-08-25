@@ -19,6 +19,8 @@
 @implementation HSTestingBackchannel
 
 static NSUInteger _port  = 54350;
+
+GCDWebServer *webServer;
     
 + (NSUInteger) port {
     return _port;
@@ -207,7 +209,7 @@ static NSUInteger _port  = 54350;
     self = [super init];
     if (self) {
         
-        GCDWebServer* webServer = [[GCDWebServer alloc] init];
+        webServer = [[GCDWebServer alloc] init];
         
         [webServer addDefaultHandlerForMethod:@"GET"
                                  requestClass:[GCDWebServerRequest class]
