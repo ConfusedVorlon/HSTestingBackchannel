@@ -15,6 +15,9 @@ Install with CocoaPods
 
 ```ruby
 pod 'HSTestingBackchannel', :configuration => ['Debug']
+
+//This is included automatically by the pod - but you need to manually configure it for 'Debug'
+pod 'GCDWebServer', :configuration => 'Debug'
 ```
 
 ## Usage
