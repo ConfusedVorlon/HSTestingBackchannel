@@ -13,6 +13,7 @@
 
 @interface HSTestingBackchannel ()
 
+@property (nonatomic, retain) GCDWebServer *webServer;
 
 @end
 
@@ -207,51 +208,53 @@ static NSUInteger _port  = 54350;
     self = [super init];
     if (self) {
         
-        GCDWebServer* webServer = [[GCDWebServer alloc] init];
+        _webServer = [[GCDWebServer alloc] init];
+        typeof(self) __weak weakSelf = self;
         
-        [webServer addDefaultHandlerForMethod:@"GET"
-                                 requestClass:[GCDWebServerRequest class]
-                                 processBlock:^GCDWebServerResponse *(GCDWebServerRequest* request) {
-                                     
-                                     if ([request.path hasPrefix:@"/filecopy"])
-                                     {
-                                         NSString *destination=[request.path lastPathComponent];
-                                         NSString *path=[self pathForDestination:[destination integerValue]];
-                                         
-                                         return [GCDWebServerDataResponse responseWithText:path];
-                                     }
-                                     
-                                     if ([request.path hasPrefix:@"/notification"])
-                                     {
-                                         NSString *notif=[request.path lastPathComponent];
-                                         NSString *response=[@"got: " stringByAppendingString:notif];
-                                         
-                                         NSNotification *notification=[NSNotification notificationWithName:notif
-                                                                                                    object:self
-                                                                                                  userInfo:request.query];
-                                         
-                                         //You are probably using notifications for UI updates, so send them on the main thread
-                                         [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:)
-                                                                                                withObject:notification
-                                                                                             waitUntilDone:YES];
-                                         
-                                         
-                                         return [GCDWebServerDataResponse responseWithText:response];
-                                     }
-                                     
-                                     if ([request.path hasPrefix:@"/device"])
-                                     {
-                                         NSString *type= (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? @"ipad" : @"iphone";
-                                         
-                                         return [GCDWebServerDataResponse responseWithText:type];
-                                     }
-                                     
-                                     return nil;
-                                     
-                                 }];
+        [_webServer addDefaultHandlerForMethod:@"GET"
+                                  requestClass:[GCDWebServerRequest class]
+                                  processBlock:^GCDWebServerResponse *(GCDWebServerRequest* request)
+         {
+            
+            if ([request.path hasPrefix:@"/filecopy"])
+            {
+                NSString *destination=[request.path lastPathComponent];
+                NSString *path=[weakSelf pathForDestination:[destination integerValue]];
+                
+                return [GCDWebServerDataResponse responseWithText:path];
+            }
+            
+            if ([request.path hasPrefix:@"/notification"])
+            {
+                NSString *notif=[request.path lastPathComponent];
+                NSString *response=[@"got: " stringByAppendingString:notif];
+                
+                NSNotification *notification=[NSNotification notificationWithName:notif
+                                                                           object:weakSelf
+                                                                         userInfo:request.query];
+                
+                //You are probably using notifications for UI updates, so send them on the main thread
+                [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:)
+                                                                       withObject:notification
+                                                                    waitUntilDone:YES];
+                
+                
+                return [GCDWebServerDataResponse responseWithText:response];
+            }
+            
+            if ([request.path hasPrefix:@"/device"])
+            {
+                NSString *type= (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? @"ipad" : @"iphone";
+                
+                return [GCDWebServerDataResponse responseWithText:type];
+            }
+            
+            return nil;
+            
+        }];
         
-        [webServer startWithPort:[HSTestingBackchannel port] bonjourName:nil];
-        NSLog(@"Visit %@ in your web browser", webServer.serverURL);
+        [_webServer startWithPort:[HSTestingBackchannel port] bonjourName:nil];
+        NSLog(@"Visit %@ in your web browser", _webServer.serverURL);
         
     }
     return self;
