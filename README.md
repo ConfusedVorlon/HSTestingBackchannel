@@ -14,23 +14,18 @@ HSTestingBackchannel gives you a simple method to send messages from your UITest
 Install with CocoaPods
 
 ```ruby
-pod 'HSTestingBackchannel', :configuration => ['Debug']
+pod 'HSTestingBackchannel', :configuration => 'Debug'
 
-//This is included automatically by the pod - but you need to manually configure it for 'Debug'
+# Dependency of HSTestingBackchannel - include this line to install it only in debug
 pod 'GCDWebServer', :configuration => 'Debug'
 ```
 
 ## Usage
 
- 1. set an 'Active Compilation Condition' in your swift project to define SNAPSHOT
-
-![Compilation](https://raw.githubusercontent.com/ConfusedVorlon/HSTestingBackchannel/master/images/compilation.jpg)
-
- 2. In your App Delegate, install the
-    helper
+### 1. In your App Delegate, install the helper
 
 ```swift
-#ifdef SNAPSHOT
+#if DEBUG
     import HSTestingBackchannel
 #endif
 ```
@@ -38,12 +33,12 @@ pod 'GCDWebServer', :configuration => 'Debug'
 And then, in `application(_:didFinishLaunchingWithOptions:)`:
 
 ```swift
-#ifdef SNAPSHOT
+#if DEBUG
     HSTestingBackchannel.installReceiver()
 #endif
 ```
 
- 3. Send notifications from your UITesting class
+### 2. Send notifications from your UITesting class
 
 ```swift
 HSTestingBackchannel.sendNotification("SnapshotTest")
@@ -52,18 +47,18 @@ HSTestingBackchannel.sendNotification("SnapshotTest")
 or
 
 ```swift
-HSTestingBackchannel.sendNotification("SnapshotTest",with: ["aKey":"aValue"])
+HSTestingBackchannel.sendNotification("SnapshotTest", with: ["aKey": "aValue"])
 ```
 
- 5. Respond to notifications within your app
+### 3. Respond to notifications within your app
 
 ```swift
-#ifdef SNAPSHOT
+#if DEBUG
     NotificationCenter.default.addObserver(
         forName: NSNotification.Name("SnapshotTest"),
         object: nil,
         queue: .main) { _ in
-            //Do Something
+            // Do Something
     }) 
 #endif
 ```
@@ -90,8 +85,9 @@ Use the setup method to do the following
 ```swift
 let app = XCUIApplication()
 
-HSTestingBackchannel.port = UInt.random(in: 8000 ... 60000)
-app.launchArguments.append(contentsOf: ["-HSTestingBackchannelPort", "\(HSTestingBackchannel.port)"])
+HSTestingBackchannel.port = UInt.random(in: 8000...60000)
+app.launchArguments.append(
+    contentsOf: ["-HSTestingBackchannelPort", "\(HSTestingBackchannel.port)"])
 
 Snapshot.setupSnapshot(app, waitForAnimations: true)
 
@@ -100,7 +96,7 @@ app.launch()
 
 ## How it works
 
-HSTestingBackchannel installs a webserver in your main app (GCDWebServer). 
+HSTestingBackchannel installs a web server in your main app (GCDWebServer). 
 
 You simply send requests directly to that - and it recognises them and broadcasts NSNotifications
 
